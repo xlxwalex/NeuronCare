@@ -63,7 +63,7 @@ def EDFHeadChanel(TmpEDFFile,Channel,Length,DataTag):
     return TmpList
 
 #EDF数据解析
-def EDFDataParse(TmpEDFFile,Data,ScaleLs,DCLs):
+def EDFDataParse2(TmpEDFFile,Data,ScaleLs,DCLs):
     TmpDataLs  = []
     TimeSpan = Data.SampleFrequen[0] * Data.DataTimeL
     TmpDataALs = np.ones((Data.ChannelNum,TimeSpan))
@@ -75,10 +75,22 @@ def EDFDataParse(TmpEDFFile,Data,ScaleLs,DCLs):
             TmpByte    = TmpByte.rstrip()
             TmpDataLs.append(ByteHexToDec(TmpByte,ScaleLs,DCLs,i))
         TmpDataALs[i] = np.array(TmpDataLs)
-        #TmpDataALs = np.append(TmpDataALs,np.array(TmpDataLs))
-    #TmpDataALs.reshape(Data.ChannelNum,TimeSpan)
     return TmpDataALs
-               
+
+#EDF数据解析
+def EDFDataParse(TmpEDFFile,Data,ScaleLs,DCLs):
+    TmpDataLs  = []
+    TimeSpan = Data.SampleFrequen[0] * Data.DataTimeL
+    TmpDataALs = np.ones((Data.ChannelNum,TimeSpan))
+    for i in range(0,Data.DataTimeL):
+        for j in range(0,Data.ChannelNum):
+            for q in range(0,Data.SampleFrequen[j]):
+                TmpDataStr = TmpEDFFile.read(2)
+                TmpByte    = TmpDataStr.lstrip()
+                TmpByte    = TmpByte.rstrip()
+                TmpDataALs[j,i*Data.SampleFrequen[j] + q] = (ByteHexToDec(TmpByte,ScaleLs,DCLs,j))
+    return TmpDataALs
+
 #EDF解析器
 def EDFParser(path):
     print('正在尝试读取文件..')
@@ -130,7 +142,6 @@ def main():
     if EDFDataGet.Tag == False:
         return
     print(EDFDataGet.Data)
-    #print(StrHexToDec("\x01\x00\x00\x00"))
 
 main()
     
