@@ -18,5 +18,5 @@ EDFDataOut = EDFDataGet.EDFParser("XXX.edf")
 ```
 2.数据的CSV形式存储
 ```
-EDFDataGet.EDFDataToCSV(EDFDataOut.Data,'EEGData.csv')
+EDFDataGet.EDFDataToCSV(EDFDataOut.Data,'XXX.csv')
 ```
