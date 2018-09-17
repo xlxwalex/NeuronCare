@@ -1,12 +1,18 @@
 #EDF文件解析器  - xlxw 2018.9.12
+#EDF PARSER CLASS
+#2018.9.17 ADD [DataSetCreate format For Matlab]
 #-----------------------------------------------------------------------------
 import os
 import numpy as np
+import random
+import scipy.io as sio
 
 #定义一个EDF CLASS
 class EDFData:
     import os
     import numpy as np
+    import random
+    import scipy.io as sio
     
     def __init__(self):
         #EDF Header
@@ -81,6 +87,37 @@ class EDFData:
                     TmpDataALs[j,i*Data.SampleFrequen[j] + q] = (EDFData.ByteHexToDec(self,TmpByte,ScaleLs,DCLs,j))
         return TmpDataALs
 
+    #EDF切分为可训练数据集
+    def EDF2DataSet(self,Start,End,Data,Duration,Channel,Val):
+        #Start为癫痫发生时间(s) End为癫痫截止时间(s) Data为解析的数据
+        #Duration为时间间隔(s) Channel 通道       Val为所需要的数据总数[非病,病前,病](s)
+        if Channel not in list(np.linspace(0,Data.ChannelNum,Data.ChannelNum)):
+            print('无可用需要采集的通道')
+            return
+        for i in Channel:
+            print('正在采集电极通道 [{}] 的数据'.format(Data.ChanelLabel[i]))
+            #按秒切片
+            Sample     = Data.SampleFrequen[i]
+            TmpData    = np.reshape(Data.Data[i],(EDFDataOut.DataTimeL,Duration))
+            DataLength = [End - Start,Start - Val[1] + EDFDataOut.DataTimeL - End,Val[1]]
+            #顺序为[病,非病,病前]
+            TmpNIllData= np.insert(TmpData[0:Start -Val[1],:],-1,TmpData[End:EDFDataOut.DataTimeL,:],0)
+            TmpILLData = TmpData[Start:End,:]
+            TmpBILLData= TmpData[Start-Val[1]:Start,:]
+            if Val[0] > DataLength[1] or Val[0] > DataLength[1] or Val[0] > DataLength[1]:
+                print('输入的需求数据超过最大上限')
+                return
+            #随机取出数据作为数据集
+            IllRandLab = random.sample(range(0,DataLength[0]),Val[2])
+            NIllRandLab= random.sample(range(0,DataLength[1]),Val[0])
+            BIllRandLab= random.sample(range(0,DataLength[2]),Val[1])
+            IllData    = TmpILLData [IllRandLab,:]
+            BIllData   = TmpBILLData[BIllRandLab,:]
+            NIllData   = TmpNIllData[NIllRandLab,:]
+            #存储为.m文件
+            sio.savemat(str(Data.ChanelLabel[i])+str(' [Data]'),{'IllData':IllData,'BeforIllData':BIllData,'NotIllData':NIllData})
+            print('生成完成，文件名为:[{}]'.format(str(Data.ChanelLabel[i])+str(' [Data]')+str('.mat')))
+
     #EDF解析器
     def EDFParser(self,path):
         print('正在尝试读取文件..')
@@ -129,5 +166,6 @@ class EDFData:
 if __name__ == '__main__':
     EDFDataGet = EDFData()
     EDFDataOut = EDFDataGet.EDFParser("/Users/xulvxiaowei/Downloads/chb01_03.edf")
-    EDFDataGet.EDFDataToCSV(EDFDataOut.Data,'EEGData.csv')
+    #EDFDataGet.EDFDataToCSV(EDFDataOut.Data,'EEGData.csv')
+    EDFDataOut.EDF2DataSet(2996,3036,EDFDataOut,256,[0],[500,20,30])
     print('数据导出完成')
