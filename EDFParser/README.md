@@ -8,8 +8,11 @@
 
 ## 依赖库 Library Dependencies
 >os
+>
 >numpy
+>
 >random
+>
 >scipy.io
 
 ## 使用方法 Usage method
@@ -40,3 +43,7 @@ EDF2DataSet(self,Start,End,Data,Duration,Channel,Val)
 example:
 EDFDataOut.EDF2DataSet(2996,3036,EDFDataOut,256,[0],[500,20,30])
 ```
+
+## 输出效果 OutPut Effect
+1.输出为.mat后显示的癫痫脑电波数据
+![avatar](http://ol7p21r3m.bkt.clouddn.com/%E7%99%AB%E7%97%AB%E8%84%91%E7%94%B5%E7%89%B9%E5%BE%81.png)
