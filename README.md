@@ -11,3 +11,7 @@
 >
 >软件
 > 完成度(10%)
+
+## 硬件设备
+### 设计电路图
+![avatar](http://ol7p21r3m.bkt.clouddn.com/CircuitBCI.png)
