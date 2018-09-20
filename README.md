@@ -14,4 +14,4 @@
 
 ## 硬件设备
 ### 设计电路图
-<div align=center><img width="300" height="200" src="http://ol7p21r3m.bkt.clouddn.com/CircuitBCI.png"/></div>
+<div align=center><img width="600" height="400" src="http://ol7p21r3m.bkt.clouddn.com/CircuitBCI.png"/></div>
