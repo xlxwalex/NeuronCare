@@ -17,4 +17,4 @@
 <div align=center><img width="600" height="400" src="http://ol7p21r3m.bkt.clouddn.com/CircuitBCI.png"/></div>
 
 ### 原理性样机
-<div align=center><img width="600" height="400" src="http://ol7p21r3m.bkt.clouddn.com/%E5%AE%9E%E7%89%A9%E5%9B%BEnew.jpg"/></div>
+<div align=center><img width="600" height="400" src="http://ol7p21r3m.bkt.clouddn.com/CircuitBCInew.jpg"/></div>
